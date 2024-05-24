@@ -2,7 +2,6 @@ package com.example.myapplication20;
 
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
@@ -17,7 +16,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import androidx.appcompat.app.AppCompatDelegate;
-
 
 public class Settings extends AppCompatActivity {
 
@@ -52,7 +50,6 @@ public class Settings extends AppCompatActivity {
 
         // Configurar listeners
         configureListeners();
-
     }
 
     private void configureListeners() {
@@ -83,6 +80,8 @@ public class Settings extends AppCompatActivity {
         });
 
         switchSonido.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            editor.putBoolean("sonido", isChecked);
+            editor.apply();
             if (isChecked) {
                 // Si el switch de sonido está activado, obtener el volumen del SeekBar
                 int progress = seekBarSonido.getProgress();
@@ -114,6 +113,8 @@ public class Settings extends AppCompatActivity {
         seekBarSonido.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                editor.putInt("volumenSonido", progress);
+                editor.apply();
                 // Verificar si el switch de sonido está activado
                 if (switchSonido.isChecked()) {
                     // Obtener el progreso actual del SeekBar
@@ -133,6 +134,7 @@ public class Settings extends AppCompatActivity {
             }
         });
     }
+
     private void playSound(float volumeLevel) {
         // Reproducir el sonido con el volumen ajustado
         MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.campana);
@@ -147,9 +149,9 @@ public class Settings extends AppCompatActivity {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
-            mediaPlayer = null;
         }
     }
+
     private void showCurrencyDialog() {
         final String[] currencies = {"$", "€", "£"};
         new AlertDialog.Builder(this)

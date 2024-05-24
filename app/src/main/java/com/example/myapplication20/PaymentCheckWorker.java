@@ -49,14 +49,19 @@ public class PaymentCheckWorker extends Worker {
     }
 
     private void sendReminder(Context context, String paymentName) {
-        createNotificationChannel(context);
-
-        // Reproducir el sonido de la notificación si está activado
+        // Acceder a SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences("SettingsPrefs", Context.MODE_PRIVATE);
-        boolean sonidoActivado = sharedPreferences.getBoolean("sonido", false);
-        if (sonidoActivado) {
-            playNotificationSound(context);
+        boolean notificationsEnabled = sharedPreferences.getBoolean("notifications", false);
+        boolean sonidoEnabled = sharedPreferences.getBoolean("sonido", false);
+        int volumenSonido = sharedPreferences.getInt("volumenSonido", 50);
+        float volumeLevel = (float) volumenSonido / 100; // Convertir a un rango de 0.0 a 1.0
+
+        // Verificar si las notificaciones están habilitadas
+        if (!notificationsEnabled) {
+            return; // No enviar notificación si están deshabilitadas
         }
+
+        createNotificationChannel(context);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
@@ -67,19 +72,19 @@ public class PaymentCheckWorker extends Worker {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, builder.build());
+
+        // Reproducir sonido si está habilitado
+        if (sonidoEnabled) {
+            playNotificationSound(context, volumeLevel);
+        }
     }
 
-    private void playNotificationSound(Context context) {
-        // Reproducir el sonido de la notificación
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SettingsPrefs", Context.MODE_PRIVATE);
-        int volumenGuardado = sharedPreferences.getInt("volumenSonido", 50);
-        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_SYSTEM);
-        int volumeLevel = (int) (maxVolume * (volumenGuardado / 100f)); // Escalar el valor del SeekBar al rango del volumen del sistema
-        audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, volumeLevel, 0);
-
+    private void playNotificationSound(Context context, float volumeLevel) {
+        // Reproducir el sonido de la notificación con el volumen ajustado
         MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.campana);
+        mediaPlayer.setVolume(volumeLevel, volumeLevel);
         mediaPlayer.start();
+        mediaPlayer.setOnCompletionListener(mp -> mp.release()); // Liberar el recurso una vez que el sonido haya terminado de reproducirse
     }
 
     private void createNotificationChannel(Context context) {

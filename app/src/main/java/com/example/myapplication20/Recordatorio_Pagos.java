@@ -1,5 +1,6 @@
 package com.example.myapplication20;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +10,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.DatePicker;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -28,10 +31,29 @@ public class Recordatorio_Pagos extends AppCompatActivity {
 
     private PaymentDatabaseHelper databaseHelper;
 
+    private SharedPreferences sharedPreferences;
+    private boolean isModoOscuro;
+    private boolean isSonidoEnabled;
+    private int volumenSonido;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Inicializar SharedPreferences
+        sharedPreferences = getSharedPreferences("SettingsPrefs", MODE_PRIVATE);
+
+        // Cargar configuraciones guardadas
+        loadSettings();
+
+        // Aplicar el modo oscuro si está activado antes de llamar a super.onCreate
+        if (isModoOscuro) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recordatorio_pagos);
+
         PeriodicWorkRequest paymentCheckRequest = new PeriodicWorkRequest.Builder(PaymentCheckWorker.class, 1, TimeUnit.DAYS)
                 .build();
         WorkManager.getInstance(this).enqueue(paymentCheckRequest);
@@ -150,5 +172,14 @@ public class Recordatorio_Pagos extends AppCompatActivity {
         // Cierra la base de datos cuando la actividad se destruye
         databaseHelper.close();
         super.onDestroy();
+    }
+
+    private void loadSettings() {
+        isModoOscuro = sharedPreferences.getBoolean("modoOscuro", false);
+        isSonidoEnabled = sharedPreferences.getBoolean("sonido", false);
+        volumenSonido = sharedPreferences.getInt("volumenSonido", 50);
+
+        // Aplicar otras configuraciones según sea necesario
+        // ...
     }
 }

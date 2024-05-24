@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Menú de pagos -->
+            <LinearLayout
+                android:id="@+id/payments_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/Secondarytext">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/Primarycolor"
+                    android:elevation="4dp"
+                    android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+                    <!-- Icono izquierdo -->
+                    <ImageView
+                        android:id="@+id/left_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/rayas"
+                        android:layout_gravity="start"
+                        android:contentDescription="Menu" />
+
+                    <!-- Título -->
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Recordatorio de Pagos"
+                        style="@style/estiloTitulo"
+                        android:gravity="center" />
+
+                    <!-- Icono derecho -->
+                    <ImageView
+                        android:id="@+id/icon_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_gravity="end"
+                        android:src="@drawable/puntos"
+                        android:contentDescription="Icono Derecho" />
+
+                </androidx.appcompat.widget.Toolbar>
+
+                <!-- Nombre del pago -->
+                <EditText
+                    android:id="@+id/editTextPaymentName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre del Pago"
+                    android:textColorHint="@color/black"
+                    android:layout_margin="8dp" />
+
+                <!-- Botón para agregar pago -->
+                <Button
+                    android:id="@+id/buttonAddPayment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Agregar Pago"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp" />
+
+                <!-- Tabla de pagos -->
+                <TableLayout
+                    android:id="@+id/payments_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/Secondarytext"
+                    android:layout_marginTop="16dp">
+                </TableLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/calendar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/DarkLightprimarycolor"
+                android:padding="8dp">
+
+                <DatePicker
+                    android:id="@+id/datePickerDueDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false"
+                    android:datePickerMode="calendar" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

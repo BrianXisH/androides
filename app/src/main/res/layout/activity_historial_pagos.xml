@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+
+    <!-- Toolbar como ActionBar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Primarycolor"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- Icono izquierdo -->
+        <ImageView
+            android:id="@+id/left_icon"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/rayas"
+            android:layout_gravity="start"
+            android:contentDescription="Menu" />
+        <!-- Título -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Historial de Pagos"
+            style="@style/estiloTitulo"
+            android:gravity="center"/>
+        <!-- Icono derecho -->
+        <ImageView
+            android:id="@+id/icon_right"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_gravity="end"
+            android:src="@drawable/puntos"
+            android:contentDescription="Icono Derecho" />
+    </androidx.appcompat.widget.Toolbar>
+    <!-- Tabla de historial de pagos -->
+    <TableLayout
+        android:id="@+id/payments_table"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:background="@color/white">
+
+        <!-- Encabezados de la tabla -->
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Usuario"
+                style="@style/estiloDatos2"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                style="@style/estiloDatos2"
+                android:text="Fecha"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                style="@style/estiloDatos2"
+                android:text="Concepto"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                style="@style/estiloDatos2"
+                android:text="Monto"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <!-- Filas de la tabla (datos simulados) -->
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/estiloDatos2"
+                android:text="Yahir"
+                android:textAlignment="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                style="@style/estiloDatos2"
+                android:text="01/01/2024"
+                android:textAlignment="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                style="@style/estiloDatos2"
+                android:text="Pago de alquiler"
+                android:textAlignment="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                style="@style/estiloDatos2"
+                android:text="$500"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <!-- Puedes agregar más filas aquí según sea necesario -->
+    </TableLayout>
+
+</RelativeLayout>

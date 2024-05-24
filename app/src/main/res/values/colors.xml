@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="darkprimarycolor">#FFA000</color>
+    <color name="Lightprimarycolor">#FFECB3</color>
+    <color name="Primarycolor">#FFC107</color>
+    <color name="TextIcons">#212121</color>
+    <color name="Accentcolor">#607D8B</color>
+    <color name="Primarytext">#212121</color>
+    <color name="Secondarytext">#757575</color>
+    <color name="Dividercolor">#BDBDBD</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Dark mode colors -->
+    <color name="DarkPrimarycolor">#FF6F00</color>
+    <color name="DarkLightprimarycolor">#FFCC80</color>
+    <color name="DarkPrimarytext">#FFFFFF</color>
+    <color name="DarkSecondarytext">#BDBDBD</color>
+    <color name="DarkBackground">#424242</color>
+</resources>

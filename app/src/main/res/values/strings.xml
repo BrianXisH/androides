@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name" translatable="false">My Application2.0</string>
+    <string name="registrate"><a href="https://forms.gle/6X7h46r6oVfNzSyBA">Registrate</a></string>
+
+</resources>

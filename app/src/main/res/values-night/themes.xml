@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MyApplication20" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/DarkPrimarycolor</item>
+        <item name="colorPrimaryDark">@color/DarkLightprimarycolor</item>
+        <item name="colorAccent">@color/Accentcolor</item>
+        <item name="android:textColorPrimary">@color/DarkPrimarytext</item>
+        <item name="android:textColorSecondary">@color/DarkSecondarytext</item>
+        <item name="android:colorBackground">@color/DarkBackground</item>
+    </style>
+
+    <style name="BottomNavigator">
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+    </style>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sizeTextobar">25dp</dimen>
+    <dimen name="sizeTextopagos">20dp</dimen>
+    <dimen name="sizeTextopagos2">12sp</dimen>
+    <dimen name="sizeTextoSettings">20sp</dimen>
+    <dimen name="margenTitulos">5dp</dimen>
+    <dimen name="margenDatos">3dp</dimen>
+    <dimen name="paddingDatos">2dp</dimen>
+
+</resources>

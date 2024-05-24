@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="estiloTitulo">
+        <item name="android:textSize">@dimen/sizeTextobar</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:layout_marginLeft">@dimen/margenTitulos</item>
+        <item name="android:padding">@dimen/margenTitulos</item>
+    </style>
+    <style name="estiloDatos">
+        <item name="android:textSize">@dimen/sizeTextopagos</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_margin">@dimen/margenDatos</item>
+        <item name="android:padding">@dimen/paddingDatos</item>
+    </style>
+    <style name="estiloDatos2">
+        <item name="android:textSize">@dimen/sizeTextopagos2</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_margin">@dimen/margenDatos</item>
+        <item name="android:padding">@dimen/paddingDatos</item>
+    </style>
+       <style name="estiloSettings">
+        <item name="android:textSize">@dimen/sizeTextoSettings</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_margin">@dimen/margenDatos</item>
+        <item name="android:padding">@dimen/paddingDatos</item>
+    </style>
+
+</resources>

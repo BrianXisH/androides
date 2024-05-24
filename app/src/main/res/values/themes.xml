@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MyApplication20" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/Primarycolor</item>
+        <item name="colorPrimaryDark">@color/darkprimarycolor</item>
+        <item name="colorAccent">@color/Accentcolor</item>
+        <item name="android:textColorPrimary">@color/Primarytext</item>
+        <item name="android:textColorSecondary">@color/Secondarytext</item>
+        <item name="android:colorBackground">@color/white</item>
+    </style>
+
+    <style name="BottomNavigator">
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+    </style>
+</resources>

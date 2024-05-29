@@ -42,7 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textStyle="italic"
-            android:text="@string/registrate" />
+            android:onClick="registrarse"
+            android:text="Registrate" />
 
     </LinearLayout>
     <LinearLayout

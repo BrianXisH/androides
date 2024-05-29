@@ -66,7 +66,6 @@
                 android:layout_height="105dp"
                 android:layout_marginRight="5sp"
                 android:background="@drawable/button_background"
-
                 android:padding="16dp">
 
                 <ImageView
@@ -187,6 +186,69 @@
                 android:text="Recordatorio de Pagos"
                 android:textSize="18sp" />
 
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/agregar_pagos"
+            android:onClick="agregarPAgo"
+            android:layout_width="315dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:text="Agregar pagos"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/grupos"
+                android:layout_width="110dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_background"
+                android:onClick="grupos"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:text="Mi grupo"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/crear_grupo"
+                android:layout_width="146dp"
+                android:layout_height="61dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/button_background"
+                android:onClick="crearGrupo"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:text="Crear/Unirme a grupo"
+                    android:textSize="18sp"
+                    android:onClick="unirme_crear_grupo"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

@@ -38,4 +38,19 @@ public class    MainActivity extends AppCompatActivity {
         Intent lanzarsettings= new Intent(this, Settings.class);
         startActivity(lanzarsettings);
     }
+
+    public void agregarPAgo(View view) {
+        Intent lanzaragregarpago= new Intent(this, AgregarGasto.class);
+        startActivity(lanzaragregarpago);
+    }
+
+    public void grupos(View view) {
+        Intent lanzargrupos= new Intent(this, Grupos.class);
+        startActivity(lanzargrupos);
+    }
+
+    public void unirme_crear_grupo(View view) {
+        Intent lanzarunirme_crear_grupo= new Intent(this, CrearGrupo.class);
+        startActivity(lanzarunirme_crear_grupo);
+    }
 }

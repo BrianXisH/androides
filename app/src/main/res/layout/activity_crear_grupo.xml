@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CrearGrupo">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Primarycolor"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        tools:ignore="MissingConstraints">
+        <!-- Icono izquierdo -->
+        <ImageView
+            android:id="@+id/left_icon"
+            android:onClick="settings"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/rayas"
+            android:layout_gravity="start"
+            android:contentDescription="Menu" />
+        <!-- Título -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Principal"
+            style="@style/estiloTitulo"
+            android:gravity="center"/>
+        <!-- Icono derecho -->
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mi_logo"
+            />
+        <ImageView
+            android:id="@+id/icon_right"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_gravity="end"
+            android:src="@drawable/puntos"
+            android:contentDescription="Icono Derecho" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Campo para ingresar el nombre del grupo -->
+    <EditText
+        android:id="@+id/group_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Nombre del grupo"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:ignore="MissingConstraints" />
+
+    <!-- Campo para ingresar el ID del grupo -->
+    <EditText
+        android:id="@+id/group_id_create"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="ID del grupo"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/group_name"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/create_group_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Crear Grupo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/group_id_create" />
+
+    <!-- Campo para unirse a un grupo -->
+    <EditText
+        android:id="@+id/group_id_join"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:hint="ID del grupo"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_group_button"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/join_group_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Unirse al Grupo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/group_id_join" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

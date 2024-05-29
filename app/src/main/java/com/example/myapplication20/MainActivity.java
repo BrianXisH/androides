@@ -176,5 +176,6 @@ public class MainActivity extends AppCompatActivity {
     public void unirme_crear_grupo(View view) {
         Intent lanzarunirme_crear_grupo = new Intent(this, CrearGrupo.class);
         startActivity(lanzarunirme_crear_grupo);
+
     }
 }

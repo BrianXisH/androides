@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void detalles(View view) {
-        Intent lanzardetalles = new Intent(this, vista2.class);
+        Intent lanzardetalles = new Intent(this, Settings.class);
         startActivity(lanzardetalles);
     }
 

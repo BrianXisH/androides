@@ -101,10 +101,7 @@ public class Grupos extends AppCompatActivity {
                             }
                         }
 
-                        if (!foundGroup) {
-                            Log.w("Grupos", "No se encontró un grupo al que pertenezca el usuario.");
-                            Toast.makeText(Grupos.this, "No se encontró un grupo al que pertenezca el usuario.", Toast.LENGTH_SHORT).show();
-                        }
+
                     } else {
                         Log.w("Grupos", "Error getting groups.", task.getException());
                         Toast.makeText(Grupos.this, "Error al obtener los grupos.", Toast.LENGTH_SHORT).show();

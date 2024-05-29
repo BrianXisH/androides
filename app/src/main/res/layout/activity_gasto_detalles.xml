@@ -11,8 +11,7 @@
         android:orientation="vertical"
         android:padding="16dp"
         android:layout_margin="20dp"
-        android:background="@drawable/button_background"
-        >
+        android:background="@drawable/button_background">
 
         <TextView
             android:id="@+id/txtNombreLabel"
@@ -66,12 +65,14 @@
             android:text="Monto:"
             android:textStyle="bold"
             android:textSize="18sp" />
+
         <TextView
             android:id="@+id/txtMonto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:layout_marginBottom="16dp" />
+
         <TextView
             android:id="@+id/txtDescripcionLabel"
             android:layout_width="wrap_content"
@@ -108,7 +109,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
-
-
 </LinearLayout>

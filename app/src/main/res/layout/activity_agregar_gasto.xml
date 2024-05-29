@@ -29,7 +29,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Principal"
+            android:text="Agregar Gasto"
             style="@style/estiloTitulo"
             android:gravity="center"/>
         <!-- Icono derecho -->
@@ -81,10 +81,10 @@
 
     <!-- Sección para agregar un pago y seleccionar categoría -->
     <TextView
-        android:id="@+id/payment_label"
+        android:id="@+id/expense_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agregar Pago"
+        android:text="Agregar Gasto"
         android:textSize="18sp"
         android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/add_category_button"
@@ -92,34 +92,60 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/payment_input"
+        android:id="@+id/expense_name_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Monto del pago"
-        android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@+id/payment_label"
-        app:layout_constraintStart_toStartOf="parent"
+        android:hint="Nombre del gasto"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expense_label"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/expense_amount_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Monto del gasto"
+        android:inputType="numberDecimal"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expense_name_input"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/expense_description_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Descripción del gasto"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expense_amount_input"
+        tools:ignore="MissingConstraints" />
 
     <Spinner
         android:id="@+id/category_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/payment_input"
+        app:layout_constraintTop_toBottomOf="@+id/expense_description_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp" />
 
     <Button
-        android:id="@+id/add_payment_button"
+        android:id="@+id/add_expense_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agregar Pago"
-        app:layout_constraintTop_toBottomOf="@+id/category_spinner"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Agregar Gasto"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_spinner"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

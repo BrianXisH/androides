@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHolder> {
-
     private List<Gasto> gastos;
     private OnItemClickListener listener;
 
@@ -19,12 +18,12 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
         void onItemClick(Gasto gasto);
     }
 
-    public GastoAdapter(List<Gasto> gastos) {
-        this.gastos = gastos;
-    }
-
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public GastoAdapter(List<Gasto> gastos) {
+        this.gastos = gastos;
     }
 
     @NonNull
@@ -37,9 +36,9 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
     @Override
     public void onBindViewHolder(@NonNull GastoViewHolder holder, int position) {
         Gasto gasto = gastos.get(position);
-        holder.textViewNombreGasto.setText(gasto.getNombre());
-        holder.textViewDescripcionGasto.setText(gasto.getDescripcion());
-        holder.textViewMontoGasto.setText(String.valueOf(gasto.getMonto()));
+        holder.nombreTextView.setText(gasto.getNombreGasto());  // Usar getNombreGasto en lugar de getNombre
+        holder.fechaTextView.setText(gasto.getFecha());
+        holder.montoTextView.setText(String.valueOf(gasto.getMonto()));
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -48,21 +47,22 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
         });
     }
 
+
     @Override
     public int getItemCount() {
         return gastos.size();
     }
 
     public static class GastoViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewNombreGasto;
-        TextView textViewDescripcionGasto;
-        TextView textViewMontoGasto;
+        public TextView nombreTextView;
+        public TextView fechaTextView;
+        public TextView montoTextView;
 
         public GastoViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewNombreGasto = itemView.findViewById(R.id.textViewNombreGasto);
-            textViewDescripcionGasto = itemView.findViewById(R.id.textViewDescripcionGasto);
-            textViewMontoGasto = itemView.findViewById(R.id.textViewMontoGasto);
+            nombreTextView = itemView.findViewById(R.id.nombreGasto);
+            fechaTextView = itemView.findViewById(R.id.fechaGasto);
+            montoTextView = itemView.findViewById(R.id.montoGasto);
         }
     }
 }

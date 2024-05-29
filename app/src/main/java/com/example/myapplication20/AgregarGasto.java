@@ -1,6 +1,7 @@
 package com.example.myapplication20;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,19 +15,25 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class AgregarGasto extends AppCompatActivity {
+    private EditText categoryInput, expenseNameInput, expenseAmountInput, expenseDescriptionInput;
+    private Button addCategoryButton, addExpenseButton;
     private Spinner categorySpinner;
-    private EditText categoryInput;
-    private Button addCategoryButton;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +47,15 @@ public class AgregarGasto extends AppCompatActivity {
             return insets;
         });
 
-        categorySpinner = findViewById(R.id.category_spinner);
         categoryInput = findViewById(R.id.category_input);
+        expenseNameInput = findViewById(R.id.expense_name_input);
+        expenseAmountInput = findViewById(R.id.expense_amount_input);
+        expenseDescriptionInput = findViewById(R.id.expense_description_input);
         addCategoryButton = findViewById(R.id.add_category_button);
+        addExpenseButton = findViewById(R.id.add_expense_button);
+        categorySpinner = findViewById(R.id.category_spinner);
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         loadCategories();
 
@@ -51,6 +63,13 @@ public class AgregarGasto extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addCategory();
+            }
+        });
+
+        addExpenseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addExpense();
             }
         });
     }
@@ -95,6 +114,76 @@ public class AgregarGasto extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(AgregarGasto.this, "Error al agregar categoría", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void addExpense() {
+        String expenseName = expenseNameInput.getText().toString().trim();
+        String expenseAmount = expenseAmountInput.getText().toString().trim();
+        String expenseDescription = expenseDescriptionInput.getText().toString().trim();
+        String selectedCategory = categorySpinner.getSelectedItem().toString();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (expenseName.isEmpty()) {
+            Toast.makeText(this, "Por favor, ingrese el nombre del gasto", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (expenseAmount.isEmpty()) {
+            Toast.makeText(this, "Por favor, ingrese el monto del gasto", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (expenseDescription.isEmpty()) {
+            Toast.makeText(this, "Por favor, ingrese la descripción del gasto", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (currentUser == null) {
+            Toast.makeText(this, "No se encontró al usuario autenticado", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = currentUser.getUid();
+        String userName = currentUser.getDisplayName();
+        String userEmail = currentUser.getEmail();
+        String currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+
+        Map<String, Object> expenseData = new HashMap<>();
+        expenseData.put("nombreUsuario", userName);
+        expenseData.put("fecha", currentDate);
+        expenseData.put("nombreGasto", expenseName);
+        expenseData.put("monto", Double.parseDouble(expenseAmount));
+        expenseData.put("descripcion", expenseDescription);
+        expenseData.put("categoria", selectedCategory);
+
+        db.collection("grupos").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        boolean foundGroup = false;
+                        for (QueryDocumentSnapshot groupDocument : task.getResult()) {
+                            String groupId = groupDocument.getId();
+                            db.collection("grupos").document(groupId).collection("miembros")
+                                    .document(userId).get().addOnCompleteListener(memberTask -> {
+                                        if (memberTask.isSuccessful() && memberTask.getResult().exists()) {
+                                            // Guardar el gasto en la subcolección gastos del grupo encontrado
+                                            db.collection("grupos").document(groupId).collection("gastos")
+                                                    .add(expenseData)
+                                                    .addOnSuccessListener(documentReference -> Toast.makeText(AgregarGasto.this, "Gasto agregado exitosamente", Toast.LENGTH_SHORT).show())
+                                                    .addOnFailureListener(e -> Toast.makeText(AgregarGasto.this, "Error al agregar el gasto", Toast.LENGTH_SHORT).show());
+                                        }
+                                    });
+
+                            if (foundGroup) {
+                                break;
+                            }
+                        }
+
+
+                    } else {
+                        Log.w("AgregarGasto", "Error getting groups.", task.getException());
+                        Toast.makeText(AgregarGasto.this, "Error al obtener los grupos.", Toast.LENGTH_SHORT).show();
+                    }
                 });
     }
 }

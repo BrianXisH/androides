@@ -1,5 +1,6 @@
 package com.example.myapplication20;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -78,6 +79,8 @@ public class RegistrarUsuario extends AppCompatActivity {
                                     }
                                 });
                         Toast.makeText(RegistrarUsuario.this, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegistrarUsuario.this, Login.class);
+                        startActivity(intent);
 
                     } else {
                         // Error al registrar el usuario

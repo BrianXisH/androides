@@ -38,7 +38,6 @@
             android:layout_height="25dp"
             android:layout_gravity="end"
             android:src="@drawable/puntos"
-            android:onClick="detalles"
             android:contentDescription="Icono Derecho" />
     </androidx.appcompat.widget.Toolbar>
 
@@ -56,6 +55,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
             android:orientation="horizontal"
+            android:onClick="detalles"
             android:weightSum="2">
 
             <LinearLayout
@@ -63,7 +63,6 @@
                 android:layout_height="105dp"
                 android:layout_marginRight="5sp"
                 android:background="@drawable/button_background"
-                android:onClick="misgastos"
                 android:padding="16dp">
 
                 <ImageView
@@ -230,11 +229,20 @@
             android:background="@drawable/button_background"
             android:orientation="vertical">
 
-            <ImageView
+            <com.example.myapplication20.PieChartView
+                android:id="@+id/pieChart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/grafica_pastel" />
+                android:layout_height="match_parent" />
         </LinearLayout>
+
+        <!-- Contenedor para los nombres y porcentajes -->
+        <LinearLayout
+            android:id="@+id/porcentajesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp" />
 
     </LinearLayout>
 </RelativeLayout>

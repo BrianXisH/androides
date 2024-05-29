@@ -1,10 +1,14 @@
 package com.example.myapplication20;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,12 +25,19 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView saldoActualTextView;
     private TextView gastosTotalesTextView;
+    private LinearLayout porcentajesLayout;
+    private PieChartView pieChart;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private ListenerRegistration gastosListenerRegistration;
@@ -39,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         saldoActualTextView = findViewById(R.id.saldoActualTextView);
         gastosTotalesTextView = findViewById(R.id.gastosTotales);
+        pieChart = findViewById(R.id.pieChart);
+        porcentajesLayout = findViewById(R.id.porcentajesLayout);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
@@ -125,13 +138,24 @@ public class MainActivity extends AppCompatActivity {
                                                             }
 
                                                             double totalGastosGrupo = 0;
+                                                            Map<String, Double> userGastos = new HashMap<>();
                                                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                                                 Double monto = document.getDouble("monto");
+                                                                String usuario = document.getString("nombreUsuario");
                                                                 if (monto != null) {
                                                                     totalGastosGrupo += monto;
+                                                                    if (usuario != null) {
+                                                                        if (userGastos.containsKey(usuario)) {
+                                                                            userGastos.put(usuario, userGastos.get(usuario) + monto);
+                                                                        } else {
+                                                                            userGastos.put(usuario, monto);
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                             gastosTotalesTextView.setText("$" + totalGastosGrupo);
+                                                            actualizarGrafico(userGastos, totalGastosGrupo);
+                                                            actualizarPorcentajes(userGastos, totalGastosGrupo);
                                                         }
                                                     });
                                         }
@@ -142,12 +166,39 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-    public void misgastos(View view) {
-        Intent lanzarmisgastos = new Intent(this, vista2.class);
-        startActivity(lanzarmisgastos);
+
+    private void actualizarGrafico(Map<String, Double> userGastos, double totalGastosGrupo) {
+        List<Float> values = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+        List<Integer> colors = new ArrayList<>();
+
+        int[] palette = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.CYAN, Color.MAGENTA};
+
+        int i = 0;
+        for (Map.Entry<String, Double> entry : userGastos.entrySet()) {
+            values.add((float) (entry.getValue() / totalGastosGrupo * 100));
+            labels.add(entry.getKey());
+            colors.add(palette[i % palette.length]);
+            i++;
+        }
+
+        pieChart.setData(values, labels, colors);
     }
+
+    private void actualizarPorcentajes(Map<String, Double> userGastos, double totalGastosGrupo) {
+        porcentajesLayout.removeAllViews();
+
+        for (Map.Entry<String, Double> entry : userGastos.entrySet()) {
+            TextView textView = new TextView(this);
+            String texto = entry.getKey() + ": " + String.format("%.1f%%", (entry.getValue() / totalGastosGrupo) * 100);
+            textView.setText(texto);
+            textView.setTextSize(16);
+            porcentajesLayout.addView(textView);
+        }
+    }
+
     public void detalles(View view) {
-        Intent lanzardetalles = new Intent(this, Settings.class);
+        Intent lanzardetalles = new Intent(this, vista2.class);
         startActivity(lanzardetalles);
     }
 
@@ -179,6 +230,5 @@ public class MainActivity extends AppCompatActivity {
     public void unirme_crear_grupo(View view) {
         Intent lanzarunirme_crear_grupo = new Intent(this, CrearGrupo.class);
         startActivity(lanzarunirme_crear_grupo);
-
     }
 }

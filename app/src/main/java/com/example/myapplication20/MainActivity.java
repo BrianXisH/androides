@@ -142,7 +142,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
+    public void misgastos(View view) {
+        Intent lanzarmisgastos = new Intent(this, vista2.class);
+        startActivity(lanzarmisgastos);
+    }
     public void detalles(View view) {
         Intent lanzardetalles = new Intent(this, Settings.class);
         startActivity(lanzardetalles);

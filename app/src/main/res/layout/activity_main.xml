@@ -38,6 +38,7 @@
             android:layout_height="25dp"
             android:layout_gravity="end"
             android:src="@drawable/puntos"
+            android:onClick="detalles"
             android:contentDescription="Icono Derecho" />
     </androidx.appcompat.widget.Toolbar>
 
@@ -55,7 +56,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
             android:orientation="horizontal"
-            android:onClick="detalles"
             android:weightSum="2">
 
             <LinearLayout
@@ -63,6 +63,7 @@
                 android:layout_height="105dp"
                 android:layout_marginRight="5sp"
                 android:background="@drawable/button_background"
+                android:onClick="misgastos"
                 android:padding="16dp">
 
                 <ImageView

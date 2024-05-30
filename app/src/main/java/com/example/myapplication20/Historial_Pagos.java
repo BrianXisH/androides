@@ -1,15 +1,13 @@
 package com.example.myapplication20;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Historial_Pagos extends AppCompatActivity {
+
+    private static final String TAG = "Historial_Pagos";
 
     private ListView listViewGastos;
     private ArrayAdapter<String> adapter;
@@ -32,7 +32,6 @@ public class Historial_Pagos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_historial_pagos);
-
 
         listViewGastos = findViewById(R.id.list_view_gastos);
         gastosList = new ArrayList<>();
@@ -62,23 +61,35 @@ public class Historial_Pagos extends AppCompatActivity {
                                                         if (gastoTask.isSuccessful()) {
                                                             gastosList.clear();
                                                             for (QueryDocumentSnapshot document : gastoTask.getResult()) {
-                                                                String nombreUsuario = document.getString("nombreUsuario");
-                                                                String fecha = document.getString("fecha");
-                                                                String nombreGasto = document.getString("nombreGasto");
-                                                                double monto = document.getDouble("monto");
+                                                                try {
+                                                                    String nombreUsuario = document.getString("nombreUsuario");
+                                                                    String fecha = document.getString("fecha");
+                                                                    String nombreGasto = document.getString("nombreGasto");
+                                                                    Double monto = document.getDouble("monto");
 
-                                                                String gastoItem = nombreUsuario + " - " + fecha + " - " + nombreGasto + " - $" + monto;
-                                                                gastosList.add(gastoItem);
+                                                                    if (nombreUsuario != null && fecha != null && nombreGasto != null && monto != null) {
+                                                                        String gastoItem = nombreUsuario + " - " + fecha + " - " + nombreGasto + " - $" + monto;
+                                                                        gastosList.add(gastoItem);
+                                                                    } else {
+                                                                        Log.w(TAG, "Datos incompletos en el documento: " + document.getId());
+                                                                    }
+                                                                } catch (Exception e) {
+                                                                    Log.e(TAG, "Error al procesar el documento: " + e.getMessage(), e);
+                                                                }
                                                             }
                                                             adapter.notifyDataSetChanged();
                                                         } else {
+                                                            Log.e(TAG, "Error al obtener los gastos.", gastoTask.getException());
                                                             Toast.makeText(Historial_Pagos.this, "Error al obtener los gastos.", Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
+                                        } else {
+                                            Log.e(TAG, "El usuario no es miembro del grupo: " + groupId, memberTask.getException());
                                         }
                                     });
                         }
                     } else {
+                        Log.e(TAG, "Error al obtener los grupos.", task.getException());
                         Toast.makeText(Historial_Pagos.this, "Error al obtener los grupos.", Toast.LENGTH_SHORT).show();
                     }
                 });

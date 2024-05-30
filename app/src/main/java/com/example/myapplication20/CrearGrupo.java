@@ -1,5 +1,6 @@
 package com.example.myapplication20;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
@@ -106,12 +108,49 @@ public class CrearGrupo extends AppCompatActivity {
             return;
         }
 
-        Map<String, String> memberData = new HashMap<>();
-        memberData.put("nombre", currentUser.getDisplayName());
-        memberData.put("email", currentUser.getEmail());
+        // Verificar si el grupo existe
+        db.collection("grupos").document(groupId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Verificar si el usuario ya está en algún grupo
+                        db.collection("grupos").whereArrayContains("miembros", currentUser.getUid()).get()
+                                .addOnSuccessListener(queryDocumentSnapshots -> {
+                                    boolean alreadyInGroup = false;
+                                    boolean alreadyInThisGroup = false;
 
-        db.collection("grupos").document(groupId).collection("miembros").document(currentUser.getUid()).set(memberData, SetOptions.merge())
-                .addOnSuccessListener(aVoid -> Toast.makeText(CrearGrupo.this, "Te has unido al grupo exitosamente", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(CrearGrupo.this, "Error al unirse al grupo", Toast.LENGTH_SHORT).show());
+                                    for (QueryDocumentSnapshot groupDocument : queryDocumentSnapshots) {
+                                        if (groupDocument.getId().equals(groupId)) {
+                                            alreadyInThisGroup = true;
+                                            break;
+                                        }
+                                        alreadyInGroup = true;
+                                    }
+
+                                    if (alreadyInThisGroup) {
+                                        Toast.makeText(CrearGrupo.this, "Ya perteneces a este grupo.", Toast.LENGTH_SHORT).show();
+                                    } else if (alreadyInGroup) {
+                                        Toast.makeText(CrearGrupo.this, "Ya perteneces a un grupo. No puedes unirte a otro grupo.", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Map<String, String> memberData = new HashMap<>();
+                                        memberData.put("nombre", currentUser.getDisplayName());
+                                        memberData.put("email", currentUser.getEmail());
+
+                                        db.collection("grupos").document(groupId).collection("miembros").document(currentUser.getUid()).set(memberData, SetOptions.merge())
+                                                .addOnSuccessListener(aVoid -> {
+                                                    Toast.makeText(CrearGrupo.this, "Te has unido al grupo exitosamente", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(CrearGrupo.this, MainActivity.class);
+                                                    intent.putExtra("grupoId", groupId); // Pasa el ID del grupo a la MainActivity
+                                                    startActivity(intent);
+                                                    finish();
+                                                })
+                                                .addOnFailureListener(e -> Toast.makeText(CrearGrupo.this, "Error al unirse al grupo", Toast.LENGTH_SHORT).show());
+                                    }
+                                })
+                                .addOnFailureListener(e -> Toast.makeText(CrearGrupo.this, "Error al verificar la pertenencia a grupos", Toast.LENGTH_SHORT).show());
+                    } else {
+                        Toast.makeText(CrearGrupo.this, "El grupo no existe", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(CrearGrupo.this, "Error al verificar la existencia del grupo", Toast.LENGTH_SHORT).show());
     }
 }

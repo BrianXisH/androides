@@ -1,5 +1,6 @@
 package com.example.myapplication20;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -75,9 +76,14 @@ public class RegistrarUsuario extends AppCompatActivity {
                                 .addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
                                         Log.d("Registro", "Perfil del usuario actualizado con el nombre");
+                                        Toast.makeText(RegistrarUsuario.this, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show();
+                                        // Redirigir al usuario a la pantalla de inicio de sesión
+                                        startActivity(new Intent(RegistrarUsuario.this, Login.class));
+                                        finish();
+                                    } else {
+                                        Toast.makeText(RegistrarUsuario.this, "Error al actualizar el perfil: " + task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                        Toast.makeText(RegistrarUsuario.this, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show();
 
                     } else {
                         // Error al registrar el usuario

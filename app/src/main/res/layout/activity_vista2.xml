@@ -12,30 +12,14 @@
         android:background="@color/Primarycolor"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-        <!-- Icono izquierdo -->
-        <ImageView
-            android:id="@+id/left_icon"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:contentDescription="Menu"
-            android:src="@drawable/rayas" />
-        <!-- Título -->
+
         <TextView
             android:id="@+id/title"
             style="@style/estiloTitulo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Lista de Gastos" />
-        <!-- Icono derecho -->
-        <ImageView
-            android:id="@+id/icon_right"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_gravity="end"
-            android:contentDescription="Icono Derecho"
-            android:src="@drawable/puntos" />
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
@@ -67,7 +51,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_search"
             android:contentDescription="Filtrar por fecha" />
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -76,5 +59,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_background"/>
-
 </LinearLayout>

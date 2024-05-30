@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,9 +61,14 @@ public class vista2 extends AppCompatActivity implements GastoAdapter.OnItemClic
                                                     .addOnCompleteListener(gastoTask -> {
                                                         if (gastoTask.isSuccessful()) {
                                                             for (QueryDocumentSnapshot document : gastoTask.getResult()) {
-                                                                Gasto gasto = document.toObject(Gasto.class);
-                                                                gasto.setId(document.getId());  // Asignar el ID del documento
-                                                                gastos.add(gasto);
+                                                                try {
+                                                                    Gasto gasto = document.toObject(Gasto.class);
+                                                                    gasto.setId(document.getId());  // Asignar el ID del documento
+                                                                    gastos.add(gasto);
+                                                                } catch (Exception e) {
+                                                                    // Manejo de error de deserialización
+                                                                    Log.e("Firestore", "Error al deserializar el campo 'monto' en el documento " + document.getId(), e);
+                                                                }
                                                             }
                                                             adapter.notifyDataSetChanged();
                                                         } else {
@@ -77,6 +83,7 @@ public class vista2 extends AppCompatActivity implements GastoAdapter.OnItemClic
                     }
                 });
     }
+
 
     @Override
     public void onItemClick(Gasto gasto) {

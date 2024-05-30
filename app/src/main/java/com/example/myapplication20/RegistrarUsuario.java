@@ -43,8 +43,6 @@ public class RegistrarUsuario extends AppCompatActivity {
     }
 
     public void registrarUsuario(View view) {
-        Intent lanzar_registrado = new Intent(this, Login.class);
-        startActivity(lanzar_registrado);
         String name = ((EditText) findViewById(R.id.user_name)).getText().toString();
         String email = ((EditText) findViewById(R.id.user_email)).getText().toString();
         String password = ((EditText) findViewById(R.id.user_password)).getText().toString();
@@ -78,9 +76,14 @@ public class RegistrarUsuario extends AppCompatActivity {
                                 .addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
                                         Log.d("Registro", "Perfil del usuario actualizado con el nombre");
+                                        Toast.makeText(RegistrarUsuario.this, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show();
+                                        // Redirigir al usuario a la pantalla de inicio de sesión
+                                        startActivity(new Intent(RegistrarUsuario.this, Login.class));
+                                        finish();
+                                    } else {
+                                        Toast.makeText(RegistrarUsuario.this, "Error al actualizar el perfil: " + task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                        Toast.makeText(RegistrarUsuario.this, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show();
 
                     } else {
                         // Error al registrar el usuario

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState); // Usar el método correcto
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 }
                                                             }
                                                             saldoActualTextView.setText("$" + totalGastos);
+                                                            calcularGastosTotalesGrupo(); // Actualiza la gráfica también
                                                         }
                                                     });
                                         }

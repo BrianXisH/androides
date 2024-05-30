@@ -1,5 +1,6 @@
 package com.example.myapplication20;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -111,7 +112,14 @@ public class CrearGrupo extends AppCompatActivity {
         memberData.put("email", currentUser.getEmail());
 
         db.collection("grupos").document(groupId).collection("miembros").document(currentUser.getUid()).set(memberData, SetOptions.merge())
-                .addOnSuccessListener(aVoid -> Toast.makeText(CrearGrupo.this, "Te has unido al grupo exitosamente", Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(CrearGrupo.this, "Te has unido al grupo exitosamente", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CrearGrupo.this, MainActivity.class);
+                    intent.putExtra("grupoId", groupId); // Pasa el ID del grupo a la MainActivity
+                    startActivity(intent);
+                    finish();
+                })
                 .addOnFailureListener(e -> Toast.makeText(CrearGrupo.this, "Error al unirse al grupo", Toast.LENGTH_SHORT).show());
     }
+
 }

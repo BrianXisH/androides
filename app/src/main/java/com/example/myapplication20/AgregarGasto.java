@@ -160,7 +160,6 @@ public class AgregarGasto extends AppCompatActivity {
         db.collection("grupos").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        boolean foundGroup = false;
                         for (QueryDocumentSnapshot groupDocument : task.getResult()) {
                             String groupId = groupDocument.getId();
                             db.collection("grupos").document(groupId).collection("miembros")
@@ -169,17 +168,14 @@ public class AgregarGasto extends AppCompatActivity {
                                             // Guardar el gasto en la subcolección gastos del grupo encontrado
                                             db.collection("grupos").document(groupId).collection("gastos")
                                                     .add(expenseData)
-                                                    .addOnSuccessListener(documentReference -> Toast.makeText(AgregarGasto.this, "Gasto agregado exitosamente", Toast.LENGTH_SHORT).show())
+                                                    .addOnSuccessListener(documentReference -> {
+                                                        Toast.makeText(AgregarGasto.this, "Gasto agregado exitosamente", Toast.LENGTH_SHORT).show();
+                                                        finish(); // Cierra la actividad después de agregar el gasto
+                                                    })
                                                     .addOnFailureListener(e -> Toast.makeText(AgregarGasto.this, "Error al agregar el gasto", Toast.LENGTH_SHORT).show());
                                         }
                                     });
-
-                            if (foundGroup) {
-                                break;
-                            }
                         }
-
-
                     } else {
                         Log.w("AgregarGasto", "Error getting groups.", task.getException());
                         Toast.makeText(AgregarGasto.this, "Error al obtener los grupos.", Toast.LENGTH_SHORT).show();

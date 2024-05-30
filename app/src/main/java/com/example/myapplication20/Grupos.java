@@ -3,6 +3,7 @@ package com.example.myapplication20;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class Grupos extends AppCompatActivity {
     private List<Member> memberList;
     private TextView groupIdTextView;
     private TextView groupNameTextView;
+    private String currentGroupId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,10 @@ public class Grupos extends AppCompatActivity {
         groupIdTextView = findViewById(R.id.group_id);
         groupNameTextView = findViewById(R.id.group_name);
 
+        // Inicializar botón para salir del grupo
+        Button leaveGroupButton = findViewById(R.id.leave_group_button);
+        leaveGroupButton.setOnClickListener(v -> leaveGroup());
+
         // Cargar miembros del grupo
         loadGroupMembers();
     }
@@ -67,7 +73,6 @@ public class Grupos extends AppCompatActivity {
         db.collection("grupos").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        boolean foundGroup = false;
                         for (QueryDocumentSnapshot groupDocument : task.getResult()) {
                             String groupId = groupDocument.getId();
                             db.collection("grupos").document(groupId).collection("miembros")
@@ -78,6 +83,7 @@ public class Grupos extends AppCompatActivity {
                                             // Mostrar el ID y nombre del grupo
                                             groupIdTextView.setText("ID del Grupo: " + groupId);
                                             groupNameTextView.setText("Nombre del Grupo: " + groupName);
+                                            currentGroupId = groupId;
 
                                             db.collection("grupos").document(groupId).collection("miembros").get()
                                                     .addOnCompleteListener(innerMemberTask -> {
@@ -95,17 +101,34 @@ public class Grupos extends AppCompatActivity {
                                                     });
                                         }
                                     });
-
-                            if (foundGroup) {
-                                break;
-                            }
                         }
-
-
                     } else {
                         Log.w("Grupos", "Error getting groups.", task.getException());
                         Toast.makeText(Grupos.this, "Error al obtener los grupos.", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void leaveGroup() {
+        String userId = auth.getCurrentUser().getUid();
+        if (currentGroupId != null) {
+            db.collection("grupos").document(currentGroupId).collection("miembros").document(userId)
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(Grupos.this, "Has salido del grupo", Toast.LENGTH_SHORT).show();
+                        // Clear group info and members
+                        groupIdTextView.setText("");
+                        groupNameTextView.setText("");
+                        memberList.clear();
+                        adapter.notifyDataSetChanged();
+                        currentGroupId = null;
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(Grupos.this, "Error al salir del grupo", Toast.LENGTH_SHORT).show();
+                        Log.w("Grupos", "Error removing user from group.", e);
+                    });
+        } else {
+            Toast.makeText(this, "No se encontró el grupo actual", Toast.LENGTH_SHORT).show();
+        }
     }
 }

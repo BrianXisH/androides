@@ -151,6 +151,7 @@ public class AgregarGasto extends AppCompatActivity {
 
         Map<String, Object> expenseData = new HashMap<>();
         expenseData.put("nombreUsuario", userName);
+        expenseData.put("usuarioId", userId);  // Añadimos el ID del usuario
         expenseData.put("fecha", currentDate);
         expenseData.put("nombreGasto", expenseName);
         expenseData.put("monto", Double.parseDouble(expenseAmount));

@@ -1,11 +1,14 @@
 package com.example.myapplication20;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,7 +72,7 @@ public class Grupos extends AppCompatActivity {
 
         // Inicializar botón para salir del grupo
         Button leaveGroupButton = findViewById(R.id.leave_group_button);
-        leaveGroupButton.setOnClickListener(v -> leaveGroup());
+        leaveGroupButton.setOnClickListener(v -> showLeaveGroupConfirmation());
 
         // Cargar miembros del grupo
         loadGroupMembers();
@@ -136,26 +139,61 @@ public class Grupos extends AppCompatActivity {
         });
     }
 
+    private void showLeaveGroupConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Salir del grupo")
+                .setMessage("¿Seguro que quieres salirte del grupo?")
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        leaveGroup();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
     private void leaveGroup() {
         String userId = auth.getCurrentUser().getUid();
         if (currentGroupId != null) {
-            db.collection("grupos").document(currentGroupId).collection("miembros").document(userId)
-                    .delete()
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(Grupos.this, "Has salido del grupo", Toast.LENGTH_SHORT).show();
-                        // Clear group info and members
-                        groupIdTextView.setText("");
-                        groupNameTextView.setText("");
-                        memberList.clear();
-                        adapter.notifyDataSetChanged();
-                        currentGroupId = null;
+            // Primero, elimina los registros del usuario en la subcolección "gastos"
+            db.collection("grupos").document(currentGroupId).collection("gastos")
+                    .whereEqualTo("usuarioId", userId)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            document.getReference().delete();
+                        }
+
+                        // Luego, elimina el documento del usuario en la subcolección "miembros"
+                        db.collection("grupos").document(currentGroupId).collection("miembros").document(userId)
+                                .delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(Grupos.this, "Has salido del grupo", Toast.LENGTH_SHORT).show();
+                                    // Limpiar la información del grupo y los miembros
+                                    groupIdTextView.setText("");
+                                    groupNameTextView.setText("");
+                                    memberList.clear();
+                                    adapter.notifyDataSetChanged();
+                                    currentGroupId = null;
+
+                                    // Notificar a MainActivity para que actualice la interfaz
+                                    Intent intent = new Intent(Grupos.this, MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(Grupos.this, "Error al salir del grupo", Toast.LENGTH_SHORT).show();
+                                    Log.w("Grupos", "Error removing user from group.", e);
+                                });
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(Grupos.this, "Error al salir del grupo", Toast.LENGTH_SHORT).show();
-                        Log.w("Grupos", "Error removing user from group.", e);
+                        Toast.makeText(Grupos.this, "Error al eliminar los gastos del usuario", Toast.LENGTH_SHORT).show();
+                        Log.w("Grupos", "Error removing user expenses from group.", e);
                     });
         } else {
             Toast.makeText(this, "No se encontró el grupo actual", Toast.LENGTH_SHORT).show();
         }
     }
-}
+
+    }

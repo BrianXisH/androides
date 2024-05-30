@@ -13,17 +13,16 @@
         <!-- Título -->
         <TextView
             android:id="@+id/title"
+            style="@style/estiloTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Principal"
-            style="@style/estiloTitulo"
-            android:layout_gravity="left"/>
+            android:layout_gravity="left"
+            android:text="Principal" />
         <!-- Icono derecho -->
         <ImageView
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/mi_logo"
-            />
+            android:src="@drawable/mi_logo" />
 
     </androidx.appcompat.widget.Toolbar>
 

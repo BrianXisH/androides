@@ -16,35 +16,18 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         tools:ignore="MissingConstraints">
         <!-- Icono izquierdo -->
-        <ImageView
-            android:id="@+id/left_icon"
-            android:onClick="settings"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/rayas"
-            android:layout_gravity="start"
-            android:contentDescription="Menu" />
+
         <!-- Título -->
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Principal"
+            android:text="Nuevo Grupo"
             style="@style/estiloTitulo"
             android:gravity="center"/>
         <!-- Icono derecho -->
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mi_logo"
-            />
-        <ImageView
-            android:id="@+id/icon_right"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_gravity="end"
-            android:src="@drawable/puntos"
-            android:contentDescription="Icono Derecho" />
+
+
     </androidx.appcompat.widget.Toolbar>
 
     <!-- Campo para ingresar el nombre del grupo -->
@@ -75,7 +58,7 @@
 
     <Button
         android:id="@+id/create_group_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Crear Grupo"
@@ -86,7 +69,7 @@
     <!-- Campo para unirse a un grupo -->
     <EditText
         android:id="@+id/group_id_join"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:hint="ID del grupo"
@@ -98,7 +81,7 @@
 
     <Button
         android:id="@+id/join_group_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Unirse al Grupo"

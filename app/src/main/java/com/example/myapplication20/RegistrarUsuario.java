@@ -1,5 +1,6 @@
 package com.example.myapplication20;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,8 @@ public class RegistrarUsuario extends AppCompatActivity {
     }
 
     public void registrarUsuario(View view) {
+        Intent lanzar_registrado = new Intent(this, Login.class);
+        startActivity(lanzar_registrado);
         String name = ((EditText) findViewById(R.id.user_name)).getText().toString();
         String email = ((EditText) findViewById(R.id.user_email)).getText().toString();
         String password = ((EditText) findViewById(R.id.user_password)).getText().toString();

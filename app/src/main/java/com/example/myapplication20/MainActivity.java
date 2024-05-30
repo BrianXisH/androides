@@ -3,18 +3,17 @@ package com.example.myapplication20;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         calcularSaldoActual();
         calcularGastosTotalesGrupo();
     }
@@ -64,6 +66,32 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (gastosListenerRegistration != null) {
             gastosListenerRegistration.remove();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intentSettings = new Intent(this, Settings.class);
+                startActivity(intentSettings);
+                return true;
+            case R.id.action_logout:
+                mAuth.signOut();
+                Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
+                Intent intentLogout = new Intent(MainActivity.this, Login.class);
+                startActivity(intentLogout);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

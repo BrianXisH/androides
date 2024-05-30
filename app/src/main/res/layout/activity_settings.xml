@@ -13,30 +13,15 @@
         android:background="@color/Primarycolor"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-        <!-- Icono izquierdo -->
-        <ImageView
-            android:id="@+id/left_icon"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/rayas"
-            android:layout_gravity="start"
-            android:contentDescription="Menu" />
-        <!-- Título -->
+
         <TextView
             android:id="@+id/title"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="Configuración"
             style="@style/estiloTitulo"
             android:gravity="center"/>
-        <!-- Icono derecho -->
-        <ImageView
-            android:id="@+id/icon_right"
-            android:layout_width="100dp"
-            android:layout_height="25dp"
-            android:layout_gravity="end"
-            android:src="@drawable/persona_icono"
-            android:contentDescription="Icono Derecho" />
+
     </androidx.appcompat.widget.Toolbar>
     <LinearLayout
         android:layout_width="match_parent"

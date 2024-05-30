@@ -20,8 +20,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 public class Settings extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 1001;
-    private Switch switchNotifications, switchModoOscuro, switchSonido, switchConfirmar;
-    private Button buttonMoneda, buttonIdioma;
+    private Switch switchNotifications, switchSonido, switchConfirmar;
+    private Button buttonMoneda;
     private SeekBar seekBarSonido;
 
     private SharedPreferences sharedPreferences;
@@ -60,23 +60,6 @@ public class Settings extends AppCompatActivity {
             }
         });
 
-        switchModoOscuro.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            editor.putBoolean("modoOscuro", isChecked);
-            editor.apply();
-            Toast.makeText(Settings.this, "Modo Oscuro: " + (isChecked ? "Activado" : "Desactivado"), Toast.LENGTH_SHORT).show();
-
-            // Aplicar el tema oscuro si está activado
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                // Aplicar el tema claro si está desactivado
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-
-            // Recrea la actividad para aplicar los cambios de tema
-            recreate();
-        });
-
         switchSonido.setOnCheckedChangeListener((buttonView, isChecked) -> {
             editor.putBoolean("sonido", isChecked);
             editor.apply();
@@ -101,11 +84,6 @@ public class Settings extends AppCompatActivity {
         buttonMoneda.setOnClickListener(v -> {
             // Mostrar un diálogo para seleccionar la moneda
             showCurrencyDialog();
-        });
-
-        buttonIdioma.setOnClickListener(v -> {
-            // Mostrar un diálogo para seleccionar el idioma
-            showLanguageDialog();
         });
 
         seekBarSonido.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -164,27 +142,11 @@ public class Settings extends AppCompatActivity {
                 .show();
     }
 
-    private void showLanguageDialog() {
-        final String[] languages = {"Español", "Inglés"};
-        new AlertDialog.Builder(this)
-                .setTitle("Seleccione Idioma")
-                .setItems(languages, (dialog, which) -> {
-                    String selectedLanguage = languages[which];
-                    buttonIdioma.setText(selectedLanguage);
-                    editor.putString("idioma", selectedLanguage);
-                    editor.apply();
-                    Toast.makeText(Settings.this, "Idioma seleccionado: " + selectedLanguage, Toast.LENGTH_SHORT).show();
-                })
-                .show();
-    }
-
     private void loadSettings() {
         switchNotifications.setChecked(sharedPreferences.getBoolean("notifications", false));
-        switchModoOscuro.setChecked(sharedPreferences.getBoolean("modoOscuro", false));
         switchSonido.setChecked(sharedPreferences.getBoolean("sonido", false));
         switchConfirmar.setChecked(sharedPreferences.getBoolean("confirmarTransaccion", false));
         buttonMoneda.setText(sharedPreferences.getString("moneda", "$"));
-        buttonIdioma.setText(sharedPreferences.getString("idioma", "Español"));
         seekBarSonido.setProgress(sharedPreferences.getInt("volumenSonido", 50));
     }
 

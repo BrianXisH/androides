@@ -23,6 +23,7 @@
             android:gravity="center"/>
 
     </androidx.appcompat.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/Parte1"
@@ -46,13 +47,14 @@
             android:layout_toEndOf="@id/textViewNotifications"
             android:layout_marginStart="8dp" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/Parte2"
         android:layout_below="@id/Parte1"
         android:orientation="horizontal">
-        <!-- TextView para "Notificaciones" -->
+        <!-- TextView para "Moneda" -->
         <TextView
             android:id="@+id/Moneda"
             android:layout_width="wrap_content"
@@ -61,7 +63,7 @@
             style="@style/estiloSettings"
             android:layout_below="@id/Parte2"
             android:layout_marginStart="16dp" />
-        <!-- Switch -->
+        <!-- Botón -->
         <Button
             android:id="@+id/buttonMoneda"
             android:layout_width="wrap_content"
@@ -72,15 +74,16 @@
             android:layout_marginStart="8dp"
             android:backgroundTint="@color/white" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/Parte3"
         android:layout_height="wrap_content"
         android:layout_below="@id/Parte2"
         android:orientation="horizontal">
-        <!-- TextView para "Notificaciones" -->
-
+        <!-- Añade otros componentes aquí si es necesario -->
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/Parte4"
@@ -95,13 +98,13 @@
             style="@style/estiloSettings"
             android:layout_marginStart="16dp" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/Parte5"
         android:layout_height="wrap_content"
         android:layout_below="@id/Parte4"
         android:orientation="horizontal">
-
         <!-- SeekBar para el sonido -->
         <SeekBar
             android:id="@+id/seekBarSonido"
@@ -117,6 +120,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="16dp" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -124,16 +128,16 @@
         android:layout_below="@id/Parte5"
         android:orientation="horizontal"
         android:layout_marginTop="5dp">
-        <!-- TextView para "Notificaciones" -->
-
+        <!-- Añade otros componentes aquí si es necesario -->
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/Parte7"
         android:layout_height="wrap_content"
         android:layout_below="@id/Parte6"
         android:orientation="horizontal">
-        <!-- TextView para "Notificaciones" -->
+        <!-- TextView para "Confirmar Transaccion" -->
         <TextView
             android:id="@+id/Confirmar_Transaccion"
             android:layout_width="wrap_content"

@@ -3,6 +3,7 @@ package com.example.myapplication20;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +33,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     private TextView saldoActualTextView;
     private TextView gastosTotalesTextView;
@@ -117,15 +120,23 @@ public class MainActivity extends AppCompatActivity {
                                                         @Override
                                                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                                                             if (e != null) {
+                                                                Log.e(TAG, "Error al obtener los gastos.", e);
                                                                 Toast.makeText(MainActivity.this, "Error al obtener los gastos.", Toast.LENGTH_SHORT).show();
                                                                 return;
                                                             }
 
                                                             double totalGastos = 0;
                                                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                                                Double monto = document.getDouble("monto");
-                                                                if (monto != null) {
-                                                                    totalGastos += monto;
+                                                                try {
+                                                                    Object montoObj = document.get("monto");
+                                                                    if (montoObj instanceof Number) {
+                                                                        double monto = ((Number) montoObj).doubleValue();
+                                                                        totalGastos += monto;
+                                                                    } else {
+                                                                        Log.w(TAG, "El campo 'monto' no es un número en un documento.");
+                                                                    }
+                                                                } catch (Exception ex) {
+                                                                    Log.e(TAG, "Error al leer el campo 'monto': " + ex.getMessage(), ex);
                                                                 }
                                                             }
                                                             saldoActualTextView.setText("$" + totalGastos);
@@ -135,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                                     });
                         }
                     } else {
+                        Log.e(TAG, "Error al obtener los grupos.", task.getException());
                         Toast.makeText(MainActivity.this, "Error al obtener los grupos.", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -161,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                                                         @Override
                                                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                                                             if (e != null) {
+                                                                Log.e(TAG, "Error al obtener los gastos del grupo.", e);
                                                                 Toast.makeText(MainActivity.this, "Error al obtener los gastos del grupo.", Toast.LENGTH_SHORT).show();
                                                                 return;
                                                             }
@@ -168,17 +181,24 @@ public class MainActivity extends AppCompatActivity {
                                                             double totalGastosGrupo = 0;
                                                             Map<String, Double> userGastos = new HashMap<>();
                                                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                                                Double monto = document.getDouble("monto");
-                                                                String usuario = document.getString("nombreUsuario");
-                                                                if (monto != null) {
-                                                                    totalGastosGrupo += monto;
-                                                                    if (usuario != null) {
-                                                                        if (userGastos.containsKey(usuario)) {
-                                                                            userGastos.put(usuario, userGastos.get(usuario) + monto);
-                                                                        } else {
-                                                                            userGastos.put(usuario, monto);
+                                                                try {
+                                                                    Object montoObj = document.get("monto");
+                                                                    String usuario = document.getString("nombreUsuario");
+                                                                    if (montoObj instanceof Number) {
+                                                                        double monto = ((Number) montoObj).doubleValue();
+                                                                        totalGastosGrupo += monto;
+                                                                        if (usuario != null) {
+                                                                            if (userGastos.containsKey(usuario)) {
+                                                                                userGastos.put(usuario, userGastos.get(usuario) + monto);
+                                                                            } else {
+                                                                                userGastos.put(usuario, monto);
+                                                                            }
                                                                         }
+                                                                    } else {
+                                                                        Log.w(TAG, "El campo 'monto' no es un número en un documento.");
                                                                     }
+                                                                } catch (Exception ex) {
+                                                                    Log.e(TAG, "Error al leer el campo 'monto': " + ex.getMessage(), ex);
                                                                 }
                                                             }
                                                             gastosTotalesTextView.setText("$" + totalGastosGrupo);
@@ -190,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
                                     });
                         }
                     } else {
+                        Log.e(TAG, "Error al obtener los grupos.", task.getException());
                         Toast.makeText(MainActivity.this, "Error al obtener los grupos.", Toast.LENGTH_SHORT).show();
                     }
                 });

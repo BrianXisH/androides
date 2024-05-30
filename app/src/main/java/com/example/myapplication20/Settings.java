@@ -38,11 +38,9 @@ public class Settings extends AppCompatActivity {
 
         // Inicializar los elementos de la UI
         switchNotifications = findViewById(R.id.switchNotifications);
-        switchModoOscuro = findViewById(R.id.SwitchModo);
         switchSonido = findViewById(R.id.SwitchSonido);
         switchConfirmar = findViewById(R.id.SwitchConfirmar);
         buttonMoneda = findViewById(R.id.buttonMoneda);
-        buttonIdioma = findViewById(R.id.buttonIdioma);
         seekBarSonido = findViewById(R.id.seekBarSonido);
 
         // Cargar configuraciones guardadas

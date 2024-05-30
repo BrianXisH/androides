@@ -47,7 +47,6 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
         });
     }
 
-
     @Override
     public int getItemCount() {
         return gastos.size();

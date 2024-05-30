@@ -180,6 +180,9 @@ public class MainActivity extends AppCompatActivity {
 
                                                             double totalGastosGrupo = 0;
                                                             Map<String, Double> userGastos = new HashMap<>();
+                                                            List<Integer> colors = new ArrayList<>(); // Mover la creación de colors aquí
+                                                            int[] palette = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.CYAN, Color.MAGENTA};
+                                                            int i = 0;
                                                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                                                 try {
                                                                     Object montoObj = document.get("monto");
@@ -192,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
                                                                                 userGastos.put(usuario, userGastos.get(usuario) + monto);
                                                                             } else {
                                                                                 userGastos.put(usuario, monto);
+                                                                                colors.add(palette[i % palette.length]); // Asigna color a cada usuario
+                                                                                i++;
                                                                             }
                                                                         }
                                                                     } else {
@@ -202,8 +207,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 }
                                                             }
                                                             gastosTotalesTextView.setText("$" + totalGastosGrupo);
-                                                            actualizarGrafico(userGastos, totalGastosGrupo);
-                                                            actualizarPorcentajes(userGastos, totalGastosGrupo);
+                                                            actualizarGrafico(userGastos, totalGastosGrupo, colors);
                                                         }
                                                     });
                                         }
@@ -216,33 +220,33 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void actualizarGrafico(Map<String, Double> userGastos, double totalGastosGrupo) {
+    private void actualizarGrafico(Map<String, Double> userGastos, double totalGastosGrupo, List<Integer> colors) {
         List<Float> values = new ArrayList<>();
         List<String> labels = new ArrayList<>();
-        List<Integer> colors = new ArrayList<>();
-
-        int[] palette = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.CYAN, Color.MAGENTA};
 
         int i = 0;
         for (Map.Entry<String, Double> entry : userGastos.entrySet()) {
             values.add((float) (entry.getValue() / totalGastosGrupo * 100));
             labels.add(entry.getKey());
-            colors.add(palette[i % palette.length]);
             i++;
         }
 
         pieChart.setData(values, labels, colors);
+        actualizarPorcentajes(userGastos, totalGastosGrupo, colors); // Llama a actualizarPorcentajes aquí
     }
 
-    private void actualizarPorcentajes(Map<String, Double> userGastos, double totalGastosGrupo) {
+    private void actualizarPorcentajes(Map<String, Double> userGastos, double totalGastosGrupo, List<Integer> colors) {
         porcentajesLayout.removeAllViews();
 
+        int i = 0;
         for (Map.Entry<String, Double> entry : userGastos.entrySet()) {
             TextView textView = new TextView(this);
             String texto = entry.getKey() + ": " + String.format("%.1f%%", (entry.getValue() / totalGastosGrupo) * 100);
             textView.setText(texto);
             textView.setTextSize(16);
+            textView.setTextColor(colors.get(i % colors.size())); // Establece el color aquí
             porcentajesLayout.addView(textView);
+            i++;
         }
     }
 

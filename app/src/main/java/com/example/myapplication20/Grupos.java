@@ -16,12 +16,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class Grupos extends AppCompatActivity {
 
@@ -33,6 +38,8 @@ public class Grupos extends AppCompatActivity {
     private TextView groupIdTextView;
     private TextView groupNameTextView;
     private String currentGroupId;
+    private ListenerRegistration groupListener;
+    private ListenerRegistration memberListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,45 +75,65 @@ public class Grupos extends AppCompatActivity {
         loadGroupMembers();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (groupListener != null) {
+            groupListener.remove();
+        }
+        if (memberListener != null) {
+            memberListener.remove();
+        }
+    }
+
     private void loadGroupMembers() {
         String userId = auth.getCurrentUser().getUid();
-        db.collection("grupos").get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot groupDocument : task.getResult()) {
-                            String groupId = groupDocument.getId();
-                            db.collection("grupos").document(groupId).collection("miembros")
-                                    .document(userId).get().addOnCompleteListener(memberTask -> {
-                                        if (memberTask.isSuccessful() && memberTask.getResult().exists()) {
-                                            String groupName = groupDocument.getString("nombre");
+        groupListener = db.collection("grupos").addSnapshotListener((task, e) -> {
+            if (e != null) {
+                Log.w("Grupos", "Error getting groups.", e);
+                Toast.makeText(Grupos.this, "Error al obtener los grupos.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                                            // Mostrar el ID y nombre del grupo
-                                            groupIdTextView.setText("ID del Grupo: " + groupId);
-                                            groupNameTextView.setText("Nombre del Grupo: " + groupName);
-                                            currentGroupId = groupId;
+            if (task != null) {
+                for (QueryDocumentSnapshot groupDocument : task) {
+                    String groupId = groupDocument.getId();
+                    db.collection("grupos").document(groupId).collection("miembros")
+                            .document(userId).get().addOnCompleteListener(memberTask -> {
+                                if (memberTask.isSuccessful() && memberTask.getResult().exists()) {
+                                    String groupName = groupDocument.getString("nombre");
 
-                                            db.collection("grupos").document(groupId).collection("miembros").get()
-                                                    .addOnCompleteListener(innerMemberTask -> {
-                                                        if (innerMemberTask.isSuccessful()) {
-                                                            memberList.clear();
-                                                            for (QueryDocumentSnapshot document : innerMemberTask.getResult()) {
-                                                                Member member = document.toObject(Member.class);
-                                                                memberList.add(member);
-                                                            }
-                                                            adapter.notifyDataSetChanged();
-                                                        } else {
-                                                            Log.w("Grupos", "Error getting members.", innerMemberTask.getException());
-                                                            Toast.makeText(Grupos.this, "Error al obtener los miembros del grupo.", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                        }
-                                    });
-                        }
-                    } else {
-                        Log.w("Grupos", "Error getting groups.", task.getException());
-                        Toast.makeText(Grupos.this, "Error al obtener los grupos.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                                    // Mostrar el ID y nombre del grupo
+                                    groupIdTextView.setText("ID del Grupo: " + groupId);
+                                    groupNameTextView.setText("Nombre del Grupo: " + groupName);
+                                    currentGroupId = groupId;
+
+                                    if (memberListener != null) {
+                                        memberListener.remove();
+                                    }
+
+                                    memberListener = db.collection("grupos").document(groupId).collection("miembros")
+                                            .addSnapshotListener((innerMemberTask, innerE) -> {
+                                                if (innerE != null) {
+                                                    Log.w("Grupos", "Error getting members.", innerE);
+                                                    Toast.makeText(Grupos.this, "Error al obtener los miembros del grupo.", Toast.LENGTH_SHORT).show();
+                                                    return;
+                                                }
+
+                                                if (innerMemberTask != null) {
+                                                    memberList.clear();
+                                                    for (QueryDocumentSnapshot document : innerMemberTask) {
+                                                        Member member = document.toObject(Member.class);
+                                                        memberList.add(member);
+                                                    }
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                            });
+                                }
+                            });
+                }
+            }
+        });
     }
 
     private void leaveGroup() {
